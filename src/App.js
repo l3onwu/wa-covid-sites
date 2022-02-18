@@ -104,7 +104,7 @@ const App = () => {
         <Box color="white">
           {/* Top Bar */}
           <TopBar />
-          <Box mb={10}>
+          <Box mb={10} display={["none", "none", "block"]}>
             <AccordionMap />
           </Box>
           {/* Exposure Sites Heading */}
