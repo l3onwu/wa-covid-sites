@@ -58,7 +58,7 @@ const TopBar = () => {
           </Link>
         </Stack>
       </Box>
-      <Divider mb={8} />
+      {/* <Divider /> */}
     </>
   );
 };
