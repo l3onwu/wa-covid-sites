@@ -21,7 +21,7 @@ const AccordionMap = () => {
               </span>
               View map{" "}
               <span style={{ color: "gray", fontSize: "12px" }}>
-                courtesty of Michael Riecken
+                courtesy of Michael Riecken
               </span>
             </Box>
             <AccordionIcon />
