@@ -49,6 +49,7 @@ const TopBar = () => {
             Click here for a useful google maps of exposure sites
           </Link>
           <Link
+            _hover={{ color: "orange" }}
             fontSize="sm"
             color="gray"
             isExternal
