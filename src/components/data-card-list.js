@@ -14,7 +14,7 @@ const DataCardList = ({ rows, headers }) => {
 const DataCard = ({ row, headers }) => {
   return (
     <Box
-      p={4}
+      p={1}
       mb={5}
       borderBottomWidth={1}
       borderWidthBottom={1}
@@ -23,16 +23,16 @@ const DataCard = ({ row, headers }) => {
     >
       {headers.map((header) => {
         return (
-          <Box mb={3} key={uuidv4()}>
+          <Box mb={2} key={uuidv4()}>
             <Text
-              fontSize="xs"
+              fontSize="8px"
               textTransform="uppercase"
               fontWeight="bold"
               color="yellow"
             >
               {header}
             </Text>
-            <Text fontSize="xl">{row[header]}</Text>
+            <Text fontSize="14px">{row[header]}</Text>
           </Box>
         );
       })}
