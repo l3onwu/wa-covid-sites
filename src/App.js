@@ -2,7 +2,18 @@ import { useState, useEffect } from "react";
 import { axiosGetAllRows } from "./services/axios-requests";
 import ReactGA from "react-ga";
 import extractData from "./services/extract-data";
-import { Container, Box, Flex, Spinner, Tag } from "@chakra-ui/react";
+import {
+  Container,
+  Box,
+  Flex,
+  Spinner,
+  Tag,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+  CloseButton,
+} from "@chakra-ui/react";
 import TopBar from "./components/top-bar";
 import DataTable from "./components/data-table";
 import FilterButtons from "./components/filter-buttons";
@@ -16,6 +27,8 @@ const App = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
   const [pagination, setPagination] = useState(0);
+  const [alertMessage, setAlertMessage] = useState(false);
+
   // Functions
   const changeSheetHandler = (num, filterName) => {
     const f = () => {
@@ -50,6 +63,24 @@ const App = () => {
   }, []);
   return (
     <Box background="#1D2025" minH="100vh" overflow="scroll">
+      {alertMessage && (
+        <Alert mb={3} status="info">
+          <AlertIcon />
+          <AlertTitle mr={2}>New features coming soon</AlertTitle>
+          <AlertDescription>
+            Adding the ability to sort exposure sites, and display most recently
+            updated.
+          </AlertDescription>
+          <CloseButton
+            onClick={() => {
+              setAlertMessage(false);
+            }}
+            position="absolute"
+            right="8px"
+            top="8px"
+          />
+        </Alert>
+      )}
       <Container pb="100px" maxW="900px" borderBlock={1}>
         <Box color="white">
           {/* Top Bar */}
