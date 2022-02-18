@@ -13,6 +13,7 @@ import {
   AlertTitle,
   AlertDescription,
   CloseButton,
+  Center,
 } from "@chakra-ui/react";
 import TopBar from "./components/top-bar";
 import DataTable from "./components/data-table";
@@ -85,23 +86,11 @@ const App = () => {
         <Box color="white">
           {/* Top Bar */}
           <TopBar />
-          <Box mb={8}>
+          <Box mb={10}>
             <AccordionMap />
           </Box>
-          {/* Loading spinner */}
-          {loading && (
-            <Spinner
-              size="xl"
-              color="teal"
-              position="fixed"
-              left="50%"
-              top="50%"
-              ml="-20px"
-              mt="-40px"
-            />
-          )}
           {/* Exposure Sites Heading */}
-          <Box mb={5}>
+          <Box mb={7}>
             <Tag
               py={1}
               variant="outline"
@@ -116,6 +105,12 @@ const App = () => {
               filter={filter}
             />
           </Box>
+          {/* Loading spinner */}
+          {loading && (
+            <Center mt={10}>
+              <Spinner size="xl" color="teal" />
+            </Center>
+          )}
           {/* Exposure Sites Table */}
           {!loading && (
             <Flex direction="column" justify="center">
