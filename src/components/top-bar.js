@@ -26,7 +26,10 @@ const TopBar = () => {
               <FontAwesomeIcon icon={faTable} />
             </span>
             Displaying data from the "unofficial" WA covid exposure sites
-            spreadsheet
+            spreadsheet{" "}
+            <Text style={{ color: "gray", fontSize: "12px" }}>
+              courtesy of Michael Sarich
+            </Text>
           </Text>
         </Link>
 
