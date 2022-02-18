@@ -7,7 +7,6 @@ const DataTable = ({ headers, rows, pagination }) => {
     let pageCounter = pagination;
     for (let i = 0; i < rows.length; i++) {
       if (i > 24 && i % 25 === 0) {
-        console.log(pageCounter);
         if (pageCounter) {
           pageCounter--;
         } else {
