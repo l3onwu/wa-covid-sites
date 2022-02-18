@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import TopBar from "./components/top-bar";
 import DataTable from "./components/data-table";
+import DataCardList from "./components/data-card-list";
 import FilterButtons from "./components/filter-buttons";
 import ShowMoreButton from "./components/show-more-button";
 import AccordionMap from "./components/accordion-map";
@@ -42,8 +43,25 @@ const App = () => {
   const paginationHandler = () => {
     setPagination(pagination + 1);
   };
+  // Transform data
+  const paginateRows = [];
+  const transformRows = () => {
+    let pageCounter = pagination;
+    for (let i = 0; i < rows.length; i++) {
+      if (i > 24 && i % 25 === 0) {
+        if (pageCounter) {
+          pageCounter--;
+        } else {
+          break;
+        }
+      }
+      paginateRows.push(rows[i]);
+    }
+  };
+  transformRows();
   // Analytics
   ReactGA.initialize(process.env.REACT_APP_GID);
+  // Fetch data
   const setup = async (sheetNumber = 0) => {
     setLoading(true);
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -112,14 +130,23 @@ const App = () => {
             </Center>
           )}
           {/* Exposure Sites Table */}
-          {!loading && (
+          {!loading && transformRows && (
             <Flex direction="column" justify="center">
-              <Box mb={5}>
-                <DataTable
-                  headers={headers}
-                  rows={rows}
-                  pagination={pagination}
-                />
+              <Box>
+                <Box display={["block", "block", "none"]} mb={5}>
+                  <DataCardList
+                    headers={headers}
+                    rows={paginateRows}
+                    pagination={pagination}
+                  />
+                </Box>
+                <Box display={["none", "none", "block"]}>
+                  <DataTable
+                    headers={headers}
+                    rows={paginateRows}
+                    pagination={pagination}
+                  />
+                </Box>
               </Box>
               <ShowMoreButton paginationHandler={paginationHandler} />
             </Flex>

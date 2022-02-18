@@ -1,22 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { Table, Tbody, Thead, Th, Tr, Td } from "@chakra-ui/react";
 
-const DataTable = ({ headers, rows, pagination }) => {
-  const paginateRows = [];
-  const transformRows = () => {
-    let pageCounter = pagination;
-    for (let i = 0; i < rows.length; i++) {
-      if (i > 24 && i % 25 === 0) {
-        if (pageCounter) {
-          pageCounter--;
-        } else {
-          break;
-        }
-      }
-      paginateRows.push(rows[i]);
-    }
-  };
-  transformRows();
+const DataTable = ({ headers, rows }) => {
   return (
     <Table>
       <Thead>
@@ -31,7 +16,7 @@ const DataTable = ({ headers, rows, pagination }) => {
         </Tr>
       </Thead>
       <Tbody>
-        {paginateRows.map((row) => {
+        {rows.map((row) => {
           return (
             <Tr key={uuidv4()} _hover={{ background: "#364142" }}>
               {headers.map((header) => {
