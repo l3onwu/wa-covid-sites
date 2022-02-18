@@ -7,6 +7,7 @@ import TopBar from "./components/top-bar";
 import DataTable from "./components/data-table";
 import FilterButtons from "./components/filter-buttons";
 import ShowMoreButton from "./components/show-more-button";
+import AccordionMap from "./components/accordion-map";
 
 const App = () => {
   // Local state
@@ -53,6 +54,9 @@ const App = () => {
         <Box color="white">
           {/* Top Bar */}
           <TopBar />
+          <Box mb={8}>
+            <AccordionMap />
+          </Box>
           {/* Loading spinner */}
           {loading && (
             <Spinner
@@ -82,7 +86,6 @@ const App = () => {
             />
           </Box>
           {/* Exposure Sites Table */}
-
           {!loading && (
             <Flex direction="column" justify="center">
               <Box mb={5}>
