@@ -8,7 +8,7 @@ const DataTable = ({ headers, rows }) => {
         <Tr>
           {headers.map((header) => {
             return (
-              <Th color="yellow" key={uuidv4()}>
+              <Th color="yellow" key={uuidv4()} borderColor="#4f4f4f">
                 {header}
               </Th>
             );
@@ -20,7 +20,11 @@ const DataTable = ({ headers, rows }) => {
           return (
             <Tr key={uuidv4()} _hover={{ background: "#364142" }}>
               {headers.map((header) => {
-                return <Td key={uuidv4()}>{row[header]}</Td>;
+                return (
+                  <Td key={uuidv4()} borderColor="#4f4f4f">
+                    {row[header]}{" "}
+                  </Td>
+                );
               })}
             </Tr>
           );

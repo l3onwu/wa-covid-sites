@@ -12,7 +12,7 @@ import { faMapLocationDot } from "@fortawesome/free-solid-svg-icons";
 const AccordionMap = () => {
   return (
     <Accordion allowToggle>
-      <AccordionItem borderColor="gray">
+      <AccordionItem borderColor="#4f4f4f">
         <h2>
           <AccordionButton>
             <Box flex="1" textAlign="left">

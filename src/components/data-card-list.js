@@ -19,7 +19,7 @@ const DataCard = ({ row, headers }) => {
       borderBottomWidth={1}
       borderWidthBottom={1}
       borderRadius={0}
-      borderColor="gray.500"
+      borderColor="#4f4f4f"
     >
       {headers.map((header) => {
         return (
