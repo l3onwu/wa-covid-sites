@@ -4,7 +4,7 @@ import { faBus } from "@fortawesome/free-solid-svg-icons";
 
 const FilterButtons = ({ changeSheetHandler, filter }) => {
   return (
-    <Stack direction="row">
+    <Stack direction={["column", "row", "row"]}>
       <Button
         onClick={changeSheetHandler(0, "all")}
         colorScheme={filter === "all" ? "teal" : "white"}
