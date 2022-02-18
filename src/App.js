@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { axiosGetAllRows } from "./services/axios-requests";
+import ReactGA from "react-ga";
 import extractData from "./services/extract-data";
 import { Container, Box, Flex, Spinner, Tag } from "@chakra-ui/react";
 import TopBar from "./components/top-bar";
@@ -26,8 +27,11 @@ const App = () => {
   const paginationHandler = () => {
     setPagination(pagination + 1);
   };
+  // Analytics
+  ReactGA.initialize(process.env.REACT_APP_GID);
   const setup = async (sheetNumber = 0) => {
     setLoading(true);
+    ReactGA.pageview(window.location.pathname + window.location.search);
     try {
       // Returns an object with arrays attached to properties columnMetada, rowData, rowMetada
       const dataObject = await axiosGetAllRows(sheetNumber);
