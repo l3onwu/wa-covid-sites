@@ -140,7 +140,7 @@ const App = () => {
                     pagination={pagination}
                   />
                 </Box>
-                <Box display={["none", "none", "block"]}>
+                <Box display={["none", "none", "block"]} mb={5}>
                   <DataTable
                     headers={headers}
                     rows={paginateRows}

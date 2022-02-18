@@ -10,7 +10,7 @@ import { faGithub } from "@fortawesome/free-brands-svg-icons";
 const TopBar = () => {
   return (
     <>
-      <Box pt={3} pb={7}>
+      <Box pt={3} pb={4}>
         <Heading mb={2} size="2xl">
           <span style={{ marginRight: "5px", fontSize: "30px" }}>
             <FontAwesomeIcon icon={faVirusCovid} />{" "}
@@ -38,7 +38,7 @@ const TopBar = () => {
           spacing={[1, 1, 1, 5]}
           alignItems="baseline"
         >
-          <Link
+          {/* <Link
             href="https://www.google.com/maps/d/u/0/viewer?mid=1CJMuhkDKBUB2DQ9h05Z8q0nfGs3xZYQC&ll=-32.40071016940837%2C116.19045146658974&z=8"
             fontSize="sm"
             isExternal
@@ -47,7 +47,7 @@ const TopBar = () => {
               <FontAwesomeIcon icon={faMapLocationDot} />
             </span>
             Click here for a useful google maps of exposure sites
-          </Link>
+          </Link> */}
           <Link
             _hover={{ color: "orange" }}
             fontSize="sm"
