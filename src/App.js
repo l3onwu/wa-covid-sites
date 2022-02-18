@@ -48,7 +48,7 @@ const App = () => {
     setup();
   }, []);
   return (
-    <Box background="#1D2025" minH="100vh">
+    <Box background="#1D2025" minH="100vh" overflow="scroll">
       <Container pb="100px" maxW="900px" borderBlock={1}>
         <Box color="white">
           {/* Top Bar */}
