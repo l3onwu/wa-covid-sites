@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-import { Box, Text, Stack, Square } from "@chakra-ui/react";
+import { Box, Text, Stack, Square, Flex } from "@chakra-ui/react";
 
 const DataCardList = ({ rows }) => {
   return (
@@ -13,17 +13,10 @@ const DataCardList = ({ rows }) => {
 
 const DataCard = ({ row }) => {
   return (
-    <Stack
-      direction="column"
-      spacing={3}
-      p={1}
-      pt={5}
-      pb={5}
-      borderBottomWidth={1}
-      borderColor="#4f4f4f"
-    >
+    <Box p={1} pt={5} pb={5} borderBottomWidth={1} borderColor="#4f4f4f">
+      {/* Updated tag */}
       {row["Recent"] && (
-        <Stack direction="row" spacing={2} align="center">
+        <Stack mb={3} direction="row" spacing={2} align="center">
           <Square
             backgroundColor="red.500"
             width="9px"
@@ -39,31 +32,37 @@ const DataCard = ({ row }) => {
           </Text>
         </Stack>
       )}
-      <Box>
-        <Text
-          fontSize="8px"
-          textTransform="uppercase"
-          fontWeight="bold"
-          color="yellow"
-        >
-          Date and Time
-        </Text>
-        <Text fontSize="14px" color="gray">
-          {row["objectDate"].weekdayLong} - {row["ExposureRange"]}
-        </Text>
-      </Box>
-      <Box>
-        <Text
-          fontSize="8px"
-          textTransform="uppercase"
-          fontWeight="bold"
-          color="yellow"
-        >
-          Exposure Site
-        </Text>
-        <Text fontSize="20px">{row["Business Name"]}</Text>
-      </Box>
-      {/* <Box>
+      {/* Card */}
+      <Flex direction="row">
+        <Box width="40%" mr={10}>
+          <Box>
+            <Text
+              fontSize="8px"
+              textTransform="uppercase"
+              fontWeight="bold"
+              color="yellow"
+            >
+              Date and Time
+            </Text>
+            <Text fontSize="14px">
+              {row["objectDate"].weekdayLong} - {row["ExposureRange"]}
+            </Text>
+          </Box>
+        </Box>
+
+        <Stack direction="column" spacing={3}>
+          <Box>
+            <Text
+              fontSize="8px"
+              textTransform="uppercase"
+              fontWeight="bold"
+              color="yellow"
+            >
+              Exposure Site
+            </Text>
+            <Text fontSize="14px">{row["Business Name"]}</Text>
+          </Box>
+          {/* <Box>
         <Text
           fontSize="8px"
           textTransform="uppercase"
@@ -77,33 +76,31 @@ const DataCard = ({ row }) => {
         </Text>
       </Box> */}
 
-      <Box>
-        <Text
-          fontSize="8px"
-          textTransform="uppercase"
-          fontWeight="bold"
-          color="yellow"
-        >
-          Address
-        </Text>
-        <Text fontSize="14px" color="gray">
-          {row["FullAddress"]}
-        </Text>
-      </Box>
-      <Box>
-        <Text
-          fontSize="8px"
-          textTransform="uppercase"
-          fontWeight="bold"
-          color="yellow"
-        >
-          Verified By
-        </Text>
-        <Text fontSize="14px" color="gray">
-          {row["VerifedBy"]}
-        </Text>
-      </Box>
-    </Stack>
+          <Box>
+            <Text
+              fontSize="8px"
+              textTransform="uppercase"
+              fontWeight="bold"
+              color="yellow"
+            >
+              Address
+            </Text>
+            <Text fontSize="14px">{row["FullAddress"]}</Text>
+          </Box>
+          <Box>
+            <Text
+              fontSize="8px"
+              textTransform="uppercase"
+              fontWeight="bold"
+              color="yellow"
+            >
+              Verified By
+            </Text>
+            <Text fontSize="14px">{row["VerifedBy"]}</Text>
+          </Box>
+        </Stack>
+      </Flex>
+    </Box>
   );
 };
 
