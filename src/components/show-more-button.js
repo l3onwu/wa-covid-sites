@@ -1,12 +1,21 @@
 import { Button } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 
-const ShowMoreButton = ({ paginationHandler }) => {
+const ShowMoreButton = ({ paginationHandler, paginationEnd }) => {
   return (
-    <Button onClick={paginationHandler} size="sm" colorScheme="orange">
-      <ChevronDownIcon mr={1} />
-      Show 25 More
-    </Button>
+    <>
+      {!paginationEnd ? (
+        <Button onClick={paginationHandler} size="sm" colorScheme="orange">
+          <ChevronDownIcon mr={1} />
+          Show more
+        </Button>
+      ) : (
+        <Button disabled size="sm" colorScheme="gray" color="black">
+          <ChevronDownIcon mr={1} />
+          No more sites
+        </Button>
+      )}
+    </>
   );
 };
 

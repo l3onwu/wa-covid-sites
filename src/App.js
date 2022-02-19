@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { axiosGetAllRows } from "./services/axios-requests";
+import axiosGetAllRows from "./services/axios-requests";
 import ReactGA from "react-ga";
 import extractData from "./services/extract-data";
 import {
@@ -8,12 +8,10 @@ import {
   Flex,
   Spinner,
   Tag,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  CloseButton,
   Center,
+  Stack,
+  Text,
+  Checkbox,
 } from "@chakra-ui/react";
 import TopBar from "./components/top-bar";
 import DataTable from "./components/data-table";
@@ -28,47 +26,123 @@ const App = () => {
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
+  const [recent, setRecent] = useState(false);
   const [pagination, setPagination] = useState(0);
-  const [alertMessage, setAlertMessage] = useState(false);
 
   // Functions
-  const changeSheetHandler = (num, filterName) => {
+  const changeSheetHandler = (filterName) => {
     const f = () => {
+      setLoading(true);
       setPagination(0);
       setFilter(filterName);
-      setup(num);
+      setTimeout(() => {
+        setLoading(false);
+      }, 250);
     };
     return f;
+  };
+  const recentHandler = () => {
+    setLoading(true);
+    setPagination(0);
+    setRecent(!recent);
+    setTimeout(() => {
+      setLoading(false);
+    }, 250);
   };
   const paginationHandler = () => {
     setPagination(pagination + 1);
   };
-  // Transform data
-  const paginateRows = [];
-  const transformRows = () => {
+
+  // Filter data
+  let filteredRows = [];
+  const filterData = () => {
+    let fRows;
+    // Filter by filter
+    if (filter === "all") {
+      fRows = rows.filter((row) => {
+        return row;
+      });
+    }
+    if (filter === "schools") {
+      fRows = rows.filter((row) => {
+        return row.IsSchool === "1";
+      });
+    }
+    if (filter === "north") {
+      fRows = rows.filter((row) => {
+        return row["Region"] === "Perth - North";
+      });
+    }
+    if (filter === "south") {
+      fRows = rows.filter((row) => {
+        return row["Region"] === "Perth - South";
+      });
+    }
+    if (filter === "east") {
+      fRows = rows.filter((row) => {
+        return row["Region"] === "Perth - East";
+      });
+    }
+    filteredRows = fRows;
+  };
+  filterData();
+
+  // Sort recent data
+  let recentRows = [];
+  const recentifyRows = () => {
+    let tempRows;
+    if (recent) {
+      tempRows = filteredRows.filter((row) => {
+        return row["Recent"];
+      });
+      tempRows.sort((a, b) => {
+        return a["Recent"] - b["Recent"];
+      });
+    } else {
+      tempRows = filteredRows.filter((row) => {
+        return row;
+      });
+    }
+    recentRows = tempRows;
+  };
+  recentifyRows();
+
+  // Paginate data
+  const paginatedRows = [];
+  let paginationEnd = false;
+  const paginateRows = () => {
     let pageCounter = pagination;
-    for (let i = 0; i < rows.length; i++) {
-      if (i > 24 && i % 25 === 0) {
+    for (let i = 0; i < recentRows.length; i++) {
+      if (i > 19 && i % 20 === 0) {
         if (pageCounter) {
           pageCounter--;
         } else {
           break;
         }
       }
-      paginateRows.push(rows[i]);
+      if (i === recentRows.length - 1) {
+        paginationEnd = true;
+      }
+      paginatedRows.push(recentRows[i]);
     }
   };
-  transformRows();
+  paginateRows();
+
   // Analytics
   ReactGA.initialize(process.env.REACT_APP_GID);
+
   // Fetch data
-  const setup = async (sheetNumber = 0) => {
+  const setup = async () => {
     setLoading(true);
     ReactGA.pageview(window.location.pathname + window.location.search);
     try {
       // Returns an object with arrays attached to properties columnMetada, rowData, rowMetada
-      const dataObject = await axiosGetAllRows(sheetNumber);
+      const dataObject = await axiosGetAllRows();
       const [eHeaders, eRows] = extractData(dataObject);
+      // Sort by datetime
+      eRows.sort((a, b) => {
+        return b.objectDate.ts - a.objectDate.ts;
+      });
       setHeaders(eHeaders);
       setRows(eRows);
       setLoading(false);
@@ -80,27 +154,11 @@ const App = () => {
   useEffect(() => {
     setup();
   }, []);
+
+  // Main
   return (
     <Box background="#1D2025" minH="100vh" overflow="scroll">
-      {alertMessage && (
-        <Alert mb={3} status="info">
-          <AlertIcon />
-          <AlertTitle mr={2}>New features coming soon</AlertTitle>
-          <AlertDescription>
-            Adding the ability to sort exposure sites, and display most recently
-            updated.
-          </AlertDescription>
-          <CloseButton
-            onClick={() => {
-              setAlertMessage(false);
-            }}
-            position="absolute"
-            right="8px"
-            top="8px"
-          />
-        </Alert>
-      )}
-      <Container pb="100px" maxW="900px" borderBlock={1}>
+      <Container pb="100px" maxW="1000px" borderBlock={1}>
         <Box color="white">
           {/* Top Bar */}
           <TopBar />
@@ -118,6 +176,17 @@ const App = () => {
             >
               COVID exposures have been reported at the following locations
             </Tag>
+            <Stack mb={8} direction="row" align="center">
+              <Checkbox
+                // size="sm"
+                colorScheme="red"
+                onChange={recentHandler}
+              >
+                <Text fontSize="12px" fontStyle="italic">
+                  Click to view exposure sites updated in the last 48 hours
+                </Text>
+              </Checkbox>
+            </Stack>
             <FilterButtons
               changeSheetHandler={changeSheetHandler}
               filter={filter}
@@ -130,25 +199,28 @@ const App = () => {
             </Center>
           )}
           {/* Exposure Sites Table */}
-          {!loading && transformRows && (
+          {!loading && paginatedRows && (
             <Flex direction="column" justify="center">
               <Box>
                 <Box display={["block", "block", "none"]} mb={5}>
                   <DataCardList
                     headers={headers}
-                    rows={paginateRows}
+                    rows={paginatedRows}
                     pagination={pagination}
                   />
                 </Box>
                 <Box display={["none", "none", "block"]} mb={5}>
                   <DataTable
                     headers={headers}
-                    rows={paginateRows}
+                    rows={paginatedRows}
                     pagination={pagination}
                   />
                 </Box>
               </Box>
-              <ShowMoreButton paginationHandler={paginationHandler} />
+              <ShowMoreButton
+                paginationEnd={paginationEnd}
+                paginationHandler={paginationHandler}
+              />
             </Flex>
           )}
         </Box>
