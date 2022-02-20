@@ -52,9 +52,10 @@ const DataTable = ({ rows }) => {
                     <Text fontSize="12px" color="gray" fontStyle="italic">
                       Updated{" "}
                       {Math.round((row["Recent"] / 1000 / 60 / 60) * 1) / 1}{" "}
-                      {Math.round((row["Recent"] / 1000 / 60 / 60) * 1) / 1 > 1
-                        ? "hours"
-                        : "hour"}{" "}
+                      {Math.round((row["Recent"] / 1000 / 60 / 60) * 1) / 1 ===
+                      1
+                        ? "hour"
+                        : "hours"}{" "}
                       ago
                     </Text>
                   </Stack>
