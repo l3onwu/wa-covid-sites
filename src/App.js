@@ -3,6 +3,11 @@ import axiosGetAllRows from "./services/axios-requests";
 import ReactGA from "react-ga";
 import extractData from "./services/extract-data";
 import {
+  filterData,
+  sortRecentData,
+  paginateData,
+} from "./services/transform-data";
+import {
   Container,
   Box,
   Flex,
@@ -30,7 +35,7 @@ const App = () => {
   const [pagination, setPagination] = useState(0);
 
   // Functions
-  const changeSheetHandler = (filterName) => {
+  const filterHandler = (filterName) => {
     const f = () => {
       setLoading(true);
       setPagination(0);
@@ -53,85 +58,15 @@ const App = () => {
     setPagination(pagination + 1);
   };
 
-  // Filter data
-  let filteredRows = [];
-  const filterData = () => {
-    let fRows;
-    // Filter by filter
-    if (filter === "all") {
-      fRows = rows.filter((row) => {
-        return row;
-      });
-    }
-    if (filter === "schools") {
-      fRows = rows.filter((row) => {
-        return row.IsSchool === "1";
-      });
-    }
-    if (filter === "north") {
-      fRows = rows.filter((row) => {
-        return row["Region"] === "Perth - North";
-      });
-    }
-    if (filter === "south") {
-      fRows = rows.filter((row) => {
-        return row["Region"] === "Perth - South";
-      });
-    }
-    if (filter === "east") {
-      fRows = rows.filter((row) => {
-        return row["Region"] === "Perth - East";
-      });
-    }
-    filteredRows = fRows;
-  };
-  filterData();
-
-  // Sort recent data
-  let recentRows = [];
-  const recentifyRows = () => {
-    let tempRows;
-    if (recent) {
-      tempRows = filteredRows.filter((row) => {
-        return row["Recent"];
-      });
-      tempRows.sort((a, b) => {
-        return a["Recent"] - b["Recent"];
-      });
-    } else {
-      tempRows = filteredRows.filter((row) => {
-        return row;
-      });
-    }
-    recentRows = tempRows;
-  };
-  recentifyRows();
-
-  // Paginate data
-  const paginatedRows = [];
-  let paginationEnd = false;
-  const paginateRows = () => {
-    let pageCounter = pagination;
-    for (let i = 0; i < recentRows.length; i++) {
-      if (i > 19 && i % 20 === 0) {
-        if (pageCounter) {
-          pageCounter--;
-        } else {
-          break;
-        }
-      }
-      if (i === recentRows.length - 1) {
-        paginationEnd = true;
-      }
-      paginatedRows.push(recentRows[i]);
-    }
-  };
-  paginateRows();
+  // Filter, sort, paginate - data pipeline
+  const filteredRows = filterData(rows, filter);
+  const recentRows = sortRecentData(filteredRows, recent);
+  const [paginatedRows, paginationEnd] = paginateData(recentRows, pagination);
 
   // Analytics
   ReactGA.initialize(process.env.REACT_APP_GID);
 
-  // Fetch data
+  // Fetch data on setup
   const setup = async () => {
     setLoading(true);
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -147,7 +82,8 @@ const App = () => {
       setRows(eRows);
       setLoading(false);
     } catch (err) {
-      alert(err);
+      alert("Error retrieving data, please refresh the page");
+      console.log(err);
       setLoading(false);
     }
   };
@@ -187,10 +123,7 @@ const App = () => {
                 </Text>
               </Checkbox>
             </Stack>
-            <FilterButtons
-              changeSheetHandler={changeSheetHandler}
-              filter={filter}
-            />
+            <FilterButtons filterHandler={filterHandler} filter={filter} />
           </Box>
           {/* Loading spinner */}
           {loading && (
