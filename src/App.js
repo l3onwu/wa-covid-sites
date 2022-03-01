@@ -98,7 +98,7 @@ const App = () => {
       <Container pb="100px" maxW="1000px" borderBlock={1}>
         {offline && (
           <Flex height="100vh" width="100%" justify="center" align="center">
-            <Text>
+            <Text color="white">
               wacovidsites.com is currently offline. Sorry for the
               inconvenience.
             </Text>
