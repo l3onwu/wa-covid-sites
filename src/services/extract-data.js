@@ -16,20 +16,26 @@ const extractData = (dataObject) => {
       const cell = rowData[j].values[k]["formattedValue"];
       rowObject[tempHeaders[k]] = cell;
     }
+    // Stop extracting at empty row
+    if (!rowObject["Business Name"]) {
+      break;
+    }
     if (rowObject["Date"]) {
-      // Create an UpdatedTime object for sorting recent entries
-      const updateDate = rowObject["12/02/2022 21:35:05"];
-      const parseUpdateDate = DateTime.fromFormat(
-        updateDate,
-        "dd/LL/yyyy HH:mm:ss"
-      );
-      rowObject["updateDate"] = parseUpdateDate;
-      const now = new Date();
-      const twoDaysAgo = now - 2 * 86400000;
-      if (parseUpdateDate.ts > twoDaysAgo) {
-        rowObject["Recent"] = now - parseUpdateDate.ts;
-      } else {
-        rowObject["Recent"] = false;
+      if (rowObject["12/02/2022 21:35:05"]) {
+        // Create an UpdatedTime object for sorting recent entries
+        const updateDate = rowObject["12/02/2022 21:35:05"];
+        const parseUpdateDate = DateTime.fromFormat(
+          updateDate,
+          "dd/LL/yyyy HH:mm:ss"
+        );
+        rowObject["updateDate"] = parseUpdateDate;
+        const now = new Date();
+        const twoDaysAgo = now - 2 * 86400000;
+        if (parseUpdateDate.ts > twoDaysAgo) {
+          rowObject["Recent"] = now - parseUpdateDate.ts;
+        } else {
+          rowObject["Recent"] = false;
+        }
       }
       // Create a data object of FromTime for sorting
       const rawDate = rowObject["Date"];
@@ -42,10 +48,7 @@ const extractData = (dataObject) => {
       );
       rowObject["objectDate"] = parseDate;
     }
-    // Stop extracting at empty row
-    if (!rowObject["Business Name"]) {
-      break;
-    }
+
     tempRows.push(rowObject);
   }
   return [tempHeaders, tempRows];

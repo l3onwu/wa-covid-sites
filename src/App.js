@@ -27,7 +27,7 @@ import AccordionMap from "./components/accordion-map";
 
 const App = () => {
   // Local state
-  const [offline, setOffline] = useState(true);
+  const [offline, setOffline] = useState(false);
   const [headers, setHeaders] = useState([]);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,22 +71,22 @@ const App = () => {
   const setup = async () => {
     setLoading(true);
     ReactGA.pageview(window.location.pathname + window.location.search);
-    // try {
-    //   // Returns an object with arrays attached to properties columnMetada, rowData, rowMetada
-    //   const dataObject = await axiosGetAllRows();
-    //   const [eHeaders, eRows] = extractData(dataObject);
-    //   // Sort by datetime
-    //   eRows.sort((a, b) => {
-    //     return b.objectDate.ts - a.objectDate.ts;
-    //   });
-    //   setHeaders(eHeaders);
-    //   setRows(eRows);
-    //   setLoading(false);
-    // } catch (err) {
-    //   alert("Error retrieving data, please refresh the page");
-    //   console.log(err);
-    //   setLoading(false);
-    // }
+    try {
+      // Returns an object with arrays attached to properties columnMetada, rowData, rowMetada
+      const dataObject = await axiosGetAllRows();
+      const [eHeaders, eRows] = extractData(dataObject);
+      // Sort by datetime
+      eRows.sort((a, b) => {
+        return b.objectDate.ts - a.objectDate.ts;
+      });
+      setHeaders(eHeaders);
+      setRows(eRows);
+      setLoading(false);
+    } catch (err) {
+      alert("Error retrieving data, please refresh the page");
+      console.log(err);
+      setLoading(false);
+    }
   };
   useEffect(() => {
     setup();
