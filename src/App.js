@@ -27,7 +27,7 @@ import AccordionMap from "./components/accordion-map";
 
 const App = () => {
   // Local state
-  const [offline, setOffline] = useState(false);
+  const [offline, setOffline] = useState(true);
   const [headers, setHeaders] = useState([]);
   const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -89,7 +89,9 @@ const App = () => {
     }
   };
   useEffect(() => {
-    setup();
+    if (!offline) {
+      setup();
+    }
   }, []);
 
   // Main
